@@ -1,10 +1,11 @@
 package com.emmett.camel.bean;
 
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
+
+@Getter @Setter
 public class Orders {
-    private ArrayList<Order> ordersList;
-
-    public ArrayList<Order> getOrdersList() { return ordersList; }
-    public void setOrdersList(ArrayList<Order> ordersList) { this.ordersList = ordersList; }
+    private List<Order> ordersList;
 }

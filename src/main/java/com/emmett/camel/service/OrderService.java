@@ -1,6 +1,8 @@
 package com.emmett.camel.service;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,6 +21,8 @@ public class OrderService {
         // setup some dummy orders to start with
         setupDummyOrders();
     }
+
+    public Collection<Order> getOrders() { return orders.values(); }
 
     public Order getOrder(int orderId) {
         return orders.get(orderId);
