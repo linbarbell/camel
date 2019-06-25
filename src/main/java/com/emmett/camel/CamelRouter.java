@@ -14,7 +14,5 @@ public class CamelRouter extends RouteBuilder {
             .post().type(Order.class).to("bean:orderService?method=createOrder")
             .put().type(Order.class).to("bean:orderService?method=updateOrder")
             .delete("{id}").to("bean:orderService?method=cancelOrder(${header.id})");
-
-        rest()
     }
 }
