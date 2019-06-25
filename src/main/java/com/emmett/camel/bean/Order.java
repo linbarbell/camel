@@ -1,4 +1,4 @@
-package com.emmett.camel;
+package com.emmett.camel.bean;
 
 import lombok.Getter;
 import lombok.Setter;

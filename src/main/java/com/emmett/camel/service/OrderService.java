@@ -1,36 +1,35 @@
-package com.emmett.camel;
+package com.emmett.camel.service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.emmett.camel.bean.Order;
 import org.springframework.stereotype.Component;
 
-@Component("orderService")
-public class DummyOrderService implements OrderService {
+@Component
+public class OrderService {
 
     // in memory dummy order system
     private Map<Integer, Order> orders = new HashMap<>();
 
     private final AtomicInteger idGen = new AtomicInteger();
 
-    public DummyOrderService() {
+    public OrderService() {
         // setup some dummy orders to start with
         setupDummyOrders();
     }
 
-    @Override
     public Order getOrder(int orderId) {
         return orders.get(orderId);
     }
 
-    @Override
     public void updateOrder(Order order) {
         int id = order.getId();
         orders.remove(id);
         orders.put(id, order);
     }
 
-    @Override
     public String createOrder(Order order) {
         int id = idGen.incrementAndGet();
         order.setId(id);
@@ -38,7 +37,6 @@ public class DummyOrderService implements OrderService {
         return "" + id;
     }
 
-    @Override
     public void cancelOrder(int orderId) {
         orders.remove(orderId);
     }
