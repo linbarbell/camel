@@ -38,6 +38,7 @@ public class CamelRouter extends RouteBuilder {
                     exchange.getIn().setBody(orders);
                 })
                 .split().jsonpath("$")
+                .parallelProcessing(true)
                 .convertBodyTo(Order.class)
                 .to("direct:postOrder");
     }
