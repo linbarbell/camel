@@ -2,7 +2,12 @@ package com.emmett.routing;
 
 import com.emmett.routing.bean.Order;
 import com.emmett.routing.bean.Orders;
+import com.google.gson.Gson;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,35 +16,30 @@ import java.util.List;
 @Component
 public class CamelRouter extends RouteBuilder {
 
+
     @Override
     public void configure() {
 
-        rest("/orders")
-                .get("{id}").outType(Order.class).to("direct:getOrder")
-                .post().type(Order.class).to("direct:postOrder")
-                .put().type(Order.class).to("direct:putOrder")
-                .delete("{id}").to("direct:deleteOrder");
-
-        rest("/list")
-                .get().type(new ArrayList<Order>().getClass()).to("direct:getOrders");
+        onException(Exception.class).log("${exception.message}");
 
         rest("/bulk")
                 .post().type(Orders.class).to("direct:bulkOrder");
 
-        from("direct:getOrders").to("bean:orderService?method=getOrders");
-        from("direct:getOrder").to("bean:orderService?method=getOrder(${header.id})");
-        from("direct:putOrder").to("bean:orderService?method=updateOrder");
-        from("direct:deleteOrder").to("bean:orderService?method=cancelOrder(${header.id})");
-        from("direct:postOrder").to("bean:orderService?method=createOrder");
-
         from("direct:bulkOrder")
                 .process(exchange -> {
-                    List<Order> orders = exchange.getIn().getBody(Orders.class).getOrdersList();
+                    List<Order> orders = exchange.getIn().getBody(Orders.class).getOrderList();
                     exchange.getIn().setBody(orders);
                 })
-                .split().jsonpath("$")
+                .split().body()
                 .parallelProcessing(true)
-                .convertBodyTo(Order.class)
                 .to("direct:postOrder");
+
+        from("direct:postOrder")
+                .marshal().json(JsonLibrary.Jackson)
+                .log("${body}")
+                .removeHeaders("CamelHttp*")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader("Content-Type", constant("application/json"))
+                .to("http://localhost:8080/api/orders");
     }
 }

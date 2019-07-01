@@ -7,5 +7,5 @@ import java.util.List;
 
 @Getter @Setter
 public class Orders {
-    private List<Order> ordersList;
+    public List<Order> orderList;
 }

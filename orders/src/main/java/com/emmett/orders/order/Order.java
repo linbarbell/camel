@@ -1,4 +1,4 @@
-package com.emmett.orders.bean;
+package com.emmett.orders.order;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,11 +1,11 @@
-package com.emmett.orders.service;
+package com.emmett.orders.order;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.emmett.orders.bean.Order;
+import com.emmett.orders.order.Order;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,11 +33,11 @@ public class OrderService {
         orders.put(id, order);
     }
 
-    public String createOrder(Order order) {
+    public Order createOrder(Order order) {
         int id = idGen.incrementAndGet();
         order.setId(id);
         orders.put(id, order);
-        return "" + id;
+        return order;
     }
 
     public void cancelOrder(int orderId) {
