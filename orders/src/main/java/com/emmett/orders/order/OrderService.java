@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.emmett.orders.order.Order;
 import org.springframework.stereotype.Component;
 
 @Component
