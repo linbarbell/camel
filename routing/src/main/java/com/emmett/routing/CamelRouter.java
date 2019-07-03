@@ -22,6 +22,7 @@ public class CamelRouter extends RouteBuilder {
         from("direct:bulkOrder")
                 .split().body()
                 .parallelProcessing(true)
+                .aggregationStrategy(new ListAggregationStrategy())
                 .to("direct:postOrder");
 
         from("direct:postOrder")
